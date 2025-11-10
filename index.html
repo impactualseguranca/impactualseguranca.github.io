@@ -129,14 +129,8 @@
 
     loginBtn.addEventListener("click", () => {
       // Aqui seria feita a autenticação real via Google Identity Services.
-      // Simulação:
-      const fakeUser = { nome: "Ana Souza", email: "ana.souza@gmail.com" };
-
-      alert("Login realizado com: " + fakeUser.email);
-      nomeInput.value = fakeUser.nome;
-
-      loginSection.classList.add("hidden");
-      form.classList.remove("hidden");
+      // Por enquanto, apenas simulamos o redirecionamento:
+      window.location.href = "login.html"; // 🔹 redireciona para outra página
     });
 
     // --- Envio do formulário ---
