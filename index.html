@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Impactual - Responder Entrevista</title>
+  <style>
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      margin: 0;
+      background-color: #f3f6fb;
+      color: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
+    }
+    h1 {
+      color: #0b5cff;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #555;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 18px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 5px;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #0b5cff;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #084ed1;
+    }
+    .login-google {
+      background: #fff;
+      color: #444;
+      border: 1px solid #ccc;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      margin-bottom: 15px;
+    }
+    .login-google img {
+      width: 20px;
+      height: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+    .success {
+      background: #e6f8ea;
+      color: #187a2a;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Portal Impactual</h1>
+    <p>Confirme suas informações para darmos continuidade ao processo seletivo.</p>
+
+    <!-- Simulação de login com Google -->
+    <div id="login-section">
+      <button class="login-google" id="login-google-btn">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        Entrar com Google
+      </button>
+    </div>
+
+    <!-- Formulário principal -->
+    <form id="form-entrevista" class="hidden">
+      <label>Nome completo</label>
+      <input type="text" name="nome" id="nome" required>
+
+      <label>Horários disponíveis para uma conversa</label>
+      <textarea name="horarios" rows="3" required></textarea>
+
+      <label>Pretensão salarial</label>
+      <input type="text" name="pretensao" required>
+
+      <label>Disponibilidade de início (caso selecionada)</label>
+      <textarea name="disponibilidade" rows="2"></textarea>
+
+      <button type="submit">Enviar respostas</button>
+      <div id="mensagem-sucesso" class="success hidden">✅ Respostas enviadas com sucesso!</div>
+    </form>
+  </div>
+
+  <script>
+    // --- Simulação de login Google ---
+    const loginBtn = document.getElementById("login-google-btn");
+    const loginSection = document.getElementById("login-section");
+    const form = document.getElementById("form-entrevista");
+    const nomeInput = document.getElementById("nome");
+    const msgSucesso = document.getElementById("mensagem-sucesso");
+
+    loginBtn.addEventListener("click", () => {
+      // Aqui seria feita a autenticação real via Google Identity Services.
+      // Simulação:
+      const fakeUser = { nome: "Ana Souza", email: "ana.souza@gmail.com" };
+
+      alert("Login realizado com: " + fakeUser.email);
+      nomeInput.value = fakeUser.nome;
+
+      loginSection.classList.add("hidden");
+      form.classList.remove("hidden");
+    });
+
+    // --- Envio do formulário ---
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      try {
+        // Aqui você conecta com seu backend (Node, Rails, etc.)
+        const resp = await fetch("/api/send-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        if (resp.ok) {
+          msgSucesso.classList.remove("hidden");
+          form.reset();
+        } else {
+          alert("Erro ao enviar. Tente novamente mais tarde.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Erro de conexão. Verifique o backend.");
+      }
+    });
+  </script>
+</body>
+</html>
